@@ -5,6 +5,7 @@ jobs:
       - image: circleci/golang:1.10
     steps:
       - checkout
+      - run: go get -d ./...
       - run: curl -sL https://git.io/goreleaser | bash
 workflows:
   version: 2
