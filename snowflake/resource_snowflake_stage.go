@@ -60,6 +60,21 @@ func resourceSnowflakeStage() *schema.Resource {
 				Optional: true,
 				ForceNew: true,
 			},
+			"file_format": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: true,
+			},
+			"copy_options": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: true,
+			},
+			"encryption": {
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: true,
+			},
 			"aws_external_id": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -82,6 +97,9 @@ func resourceSnowflakeStageCreate(d *schema.ResourceData, meta interface{}) erro
 	stageId := fmt.Sprintf("%s.%s.%s", database, schema, name)
 	url := d.Get("url")
 	credentials := d.Get("credentials")
+	file_format := d.Get("file_format")
+	copy_options := d.Get("copy_options")
+	encryption := d.Get("encryption")
 
 	statement := fmt.Sprintf("CREATE STAGE %v.%v.%v", database, schema, name)
 	if url != "" {
@@ -90,7 +108,15 @@ func resourceSnowflakeStageCreate(d *schema.ResourceData, meta interface{}) erro
 	if credentials != "" {
 		statement += fmt.Sprintf(" CREDENTIALS = (%v)", credentials)
 	}
-
+	if file_format != "" {
+		statement += fmt.Sprintf(" file_format = (%v)", file_format)
+	}
+	if copy_options != "" {
+		statement += fmt.Sprintf(" copy_options = (%v)", copy_options)
+	}
+	if encryption != "" {
+		statement += fmt.Sprintf(" encryption = (%v)", encryption)
+	}
 	_, err := db.Exec(statement)
 	if err != nil {
 		return err
