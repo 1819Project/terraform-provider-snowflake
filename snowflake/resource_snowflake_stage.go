@@ -51,14 +51,15 @@ func resourceSnowflakeStage() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 				StateFunc: func(v interface{}) string {
-					return strings.ToLower(v.(string))
+					return v.(string)
 				},
 				ForceNew: true,
 			},
 			"credentials": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
+				Type:      schema.TypeString,
+				Optional:  true,
+				ForceNew:  true,
+				Sensitive: true,
 			},
 			"file_format": {
 				Type:     schema.TypeString,
